@@ -2,6 +2,7 @@ import React from "react";
 import "./App.css";
 import Homepage from "./Homepage";
 import AddStuffs from "./AddStuffs";
+import ShowStuffs from "./ShowStuffs";
 import { Router } from "@reach/router";
 
 function App() {
@@ -9,7 +10,8 @@ function App() {
     <div className="App">
       <Router>
         <Homepage path="/" />
-        <AddStuffs path="/add-stuffs" />
+        <AddStuffs path="add-stuffs" />
+        <ShowStuffs path="show-stuffs" />
       </Router>
     </div>
   );
