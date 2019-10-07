@@ -1,15 +1,16 @@
-/** @jsx jsx */
-import { jsx, css } from '@emotion/core';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import "./App.css";
+import Homepage from "./Homepage";
+import AddStuffs from "./AddStuffs";
+import { Router } from "@reach/router";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <button>Hey Now</button>
-      </header>
+      <Router>
+        <Homepage path="/" />
+        <AddStuffs path="/add-stuffs" />
+      </Router>
     </div>
   );
 }
