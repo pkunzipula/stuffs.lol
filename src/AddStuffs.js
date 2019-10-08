@@ -9,6 +9,10 @@ import DatePicker from "./Components/DatePicker";
 import MapPicker from "./Components/MapPicker";
 
 const AddStuffs = () => {
+  const [location, setLocation] = useState({
+    lat: 36.015964,
+    lng: -115.176429
+  });
   const [selectedDate, handleDateChange] = useState(new Date());
   return (
     <div
@@ -43,7 +47,7 @@ const AddStuffs = () => {
         `}
       >
         <Link
-          to="/"
+          to="/see-stuffs"
           css={css`
             font-size: 2rem;
             background: crimson;
@@ -104,7 +108,7 @@ const AddStuffs = () => {
           }
         `}
       >
-        <MapPicker />
+        <MapPicker location={location} setLocation={setLocation} />
       </div>
       <div
         css={css`

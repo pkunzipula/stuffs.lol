@@ -1,29 +1,67 @@
 /** @jsx jsx */
 import { jsx, css } from "@emotion/core";
-import { useState } from "react";
+import { useEffect } from "react";
 import L from "leaflet";
+import "leaflet/dist/leaflet.css";
 
-const MapPicker = () => {
-  const position = [51.505, -0.09];
-  const map = L.map("map").setView(position, 13);
+let map = null;
 
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    attribution:
-      '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-  }).addTo(map);
+const initializeMap = (location, setLocation) => {
+  map = L.map("mapid");
+  window.navigator.geolocation.getCurrentPosition(
+    position => {
+      const latlng = [
+        location.lat || position.coords.latitude,
+        location.lng || position.coords.longitude
+      ];
+      map = map.setView(latlng, 13);
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution:
+          '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+      }).addTo(map);
+      L.marker(latlng)
+        .addTo(map)
+        .bindPopup("Location of Stuffs")
+        .openPopup();
+      const popup = L.popup();
 
-  L.marker(position)
-    .addTo(map)
-    .bindPopup("A pretty CSS3 popup. <br> Easily customizable.");
+      map.on("click", event => {
+        console.log(event.latlng);
+        setLocation({
+          lat: event.latlng.lat,
+          lng: event.latlng.lng
+        });
+        popup
+          .setLatLng(event.latlng)
+          .setContent("Activity Location: " + event.latlng.toString())
+          .openOn(map);
+      });
+    },
+    error => {
+      console.error(error);
+    },
+    {}
+  );
+};
+
+const MapPicker = ({ location, setLocation }) => {
+  useEffect(() => {
+    initializeMap(location, setLocation);
+    console.log("Everything is here");
+    return () => {
+      map.off();
+      map.remove();
+      console.log("componentWillUnmount");
+    };
+  }, [location, setLocation]);
   return (
     <div
       css={css`
         height: 250px;
+        width: 100%;
       `}
       id="mapid"
-    >
-      Hey Now
-    </div>
+    ></div>
   );
 };
 
