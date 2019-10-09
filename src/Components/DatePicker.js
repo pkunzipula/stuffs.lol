@@ -4,14 +4,18 @@ import { useState } from "react";
 import { MuiPickersUtilsProvider, DateTimePicker } from "@material-ui/pickers";
 import MomentUtils from "@date-io/moment";
 
-const DatePicker = ({ selectedDate, handleDateChange }) => {
+const DatePicker = ({ datetime, setDatetime }) => {
+  const setNewDatetime = newDatetime => {
+    setDatetime(newDatetime.toDate());
+  };
+
   return (
     <MuiPickersUtilsProvider utils={MomentUtils}>
       <DateTimePicker
         label="Date & Time of your Stuffs"
         inputVariant="outlined"
-        value={selectedDate}
-        onChange={handleDateChange}
+        value={datetime}
+        onChange={setNewDatetime}
       />
     </MuiPickersUtilsProvider>
   );

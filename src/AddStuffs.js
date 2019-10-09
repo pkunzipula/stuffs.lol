@@ -1,19 +1,25 @@
 /** @jsx jsx */
 import { jsx, css } from "@emotion/core";
 import { useState } from "react";
-import map from "./map.png";
 import { Link, navigate } from "@reach/router";
 import { MuiPickersUtilsProvider, DateTimePicker } from "@material-ui/pickers";
 import MomentUtils from "@date-io/moment";
 import DatePicker from "./Components/DatePicker";
 import MapPicker from "./Components/MapPicker";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 
-const AddStuffs = () => {
+const AddStuffs = ({ storeStuffs }) => {
+  const [title, setTitle] = useState("");
+  const [details, setDetails] = useState("");
+  const [datetime, setDatetime] = useState(new Date());
   const [location, setLocation] = useState({
     lat: 36.015964,
     lng: -115.176429
   });
-  const [selectedDate, handleDateChange] = useState(new Date());
+  const saveStuffs = () => {
+    storeStuffs({ title, details, datetime, location });
+  };
   return (
     <div
       css={css`
@@ -44,6 +50,8 @@ const AddStuffs = () => {
       <div
         css={css`
           grid-area: Buttons;
+          display: flex;
+          justify-content: space-between;
         `}
       >
         <Link
@@ -62,12 +70,11 @@ const AddStuffs = () => {
             font-size: 2rem;
             background: limegreen;
             color: white;
-            float: right;
           `}
-          onClick={() => navigate("/")}
+          onClick={saveStuffs}
           className="buttonStyle"
         >
-          Save and Go!
+          Save!
         </button>
       </div>
       <div
@@ -92,12 +99,10 @@ const AddStuffs = () => {
               margin-bottom: 30px;
             }
           `}
-          placeholder="Give a Title for your Stuffs"
+          placeholder="Title your Stuffs"
+          onChange={event => setTitle(event.target.value)}
         />
-        <DatePicker
-          selectedDate={selectedDate}
-          handleDateChange={handleDateChange}
-        />
+        <DatePicker datetime={datetime} setDatetime={setDatetime} />
       </div>
       <div
         css={css`
@@ -115,17 +120,17 @@ const AddStuffs = () => {
           grid-area: Details;
         `}
       >
-        <textarea
+        <ReactQuill
+          value={details}
+          onChange={value => setDetails(value)}
+          placeholder="Describe this Stuffs"
           css={css`
-            padding: 0.4em;
-            width: 100%;
-            min-height: 400px;
-            border: 1px solid silver;
-            font-family: Fresca, sans-serif;
-            font-size: 1.6em;
+            height: 400px;
+            font-family: Fresca;
+            font-size: 1.5rem;
+            margin-top: 90px;
           `}
-          placeholder="Imma be some details someday."
-        ></textarea>
+        />
       </div>
     </div>
   );
